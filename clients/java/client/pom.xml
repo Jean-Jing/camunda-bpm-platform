@@ -235,8 +235,7 @@
         </executions>
       </plugin>
 
-      <plugin>
-        <groupId>org.codehaus.cargo</groupId>
+<!--        <groupId>org.codehaus.cargo</groupId>
         <artifactId>cargo-maven3-plugin</artifactId>
         <executions>
           <execution>
@@ -256,7 +255,6 @@
         </executions>
         <configuration>
           <skip>${skipTests}</skip>
-          <!-- Container configuration -->
           <container>
             <type>installed</type>
             <containerId>tomcat9x</containerId>
@@ -304,7 +302,7 @@
           </deployables>
           <wait>false</wait>
         </configuration>
-      </plugin>
+      </plugin>-->
 
     </plugins>
 

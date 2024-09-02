@@ -18,6 +18,7 @@ package org.camunda.bpm.spring.boot.starter.property;
 
 import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.identity.User;
+import org.camunda.bpm.engine.impl.util.AESUtil;
 
 import static java.util.Objects.requireNonNull;
 import static org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
@@ -94,6 +95,15 @@ public class AdminUserProperty implements User {
 
   @Override
   public void setPassword(String password) {
+    try {
+      String newPassword = AESUtil.decrypt(password);
+      if (!newPassword.isEmpty()) {
+        System.out.println("Decrypting Admin password: " + newPassword);
+        password = newPassword;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     this.password = password;
   }
 

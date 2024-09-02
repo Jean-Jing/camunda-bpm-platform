@@ -70,6 +70,7 @@ SET detachProcess=false
 SET classPath=%PARENTDIR%configuration\userlib,%PARENTDIR%configuration\keystore
 SET configuration=%PARENTDIR%configuration\default.yml
 
+set "COMM_ENCRYPT_KEY_IV=****************************"
 
 REM inspect arguments
 :Loop

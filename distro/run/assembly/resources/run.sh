@@ -27,6 +27,8 @@ detachProcess=false
 classPath=$PARENTDIR/configuration/userlib/,$PARENTDIR/configuration/keystore/
 configuration=$PARENTDIR/configuration/default.yml
 
+export COMM_ENCRYPT_KEY_IV="******************************"
+
 if [ "$1" = "start" ] ; then
   shift
   # setup the JVM

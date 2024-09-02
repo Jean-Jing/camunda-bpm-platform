@@ -45,6 +45,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import javax.naming.InitialContext;
 import javax.script.ScriptEngineManager;
 import javax.sql.DataSource;
+import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.apache.ibatis.builder.xml.XMLConfigBuilder;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.apache.ibatis.mapping.Environment;
@@ -360,6 +362,7 @@ import org.camunda.bpm.engine.impl.util.IoUtil;
 import org.camunda.bpm.engine.impl.util.ParseUtil;
 import org.camunda.bpm.engine.impl.util.ProcessEngineDetails;
 import org.camunda.bpm.engine.impl.util.ReflectUtil;
+import org.camunda.bpm.engine.impl.util.AESUtil;
 import org.camunda.bpm.engine.impl.variable.ValueTypeResolverImpl;
 import org.camunda.bpm.engine.impl.variable.serializer.BooleanValueSerializer;
 import org.camunda.bpm.engine.impl.variable.serializer.ByteArrayValueSerializer;
@@ -1725,6 +1728,23 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
         ((PooledDataSource) dataSource).forceCloseAll();
       }
     }
+	else
+	{
+	  try {
+		DataSource ds = ((TransactionAwareDataSourceProxy) dataSource).getTargetDataSource();
+		if (ds instanceof HikariDataSource) {
+		  String encryptedPassword = ((HikariDataSource) ds).getPassword();
+		  String realPassword = AESUtil.decrypt(encryptedPassword);
+		  if (realPassword != null && !realPassword.isEmpty()) {
+			System.out.println("Setting password on Hikari data source: " + realPassword);
+			((HikariDataSource) ds).setPassword(realPassword);
+		  }
+		}
+	  }
+	  catch (Exception e) {
+		  e.printStackTrace();
+	  }
+	}
 
     if (databaseType == null) {
       initDatabaseType();
